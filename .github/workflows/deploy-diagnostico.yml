@@ -1,0 +1,88 @@
+name: Desplegar Diagnóstico de Campo
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/diagnostico-campo-v1
+    paths:
+      - ".github/workflows/deploy-diagnostico.yml"
+      - "prototypes/diagnostico-operativo/**"
+      - "package.json"
+      - "package-lock.json"
+      - "public/**"
+      - "src/**"
+      - "index.html"
+      - "vite.config.ts"
+      - "tsconfig*.json"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      app-directory: ${{ steps.app-directory.outputs.path }}
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+
+      - name: Localizar aplicación
+        id: app-directory
+        shell: bash
+        run: |
+          if [ -f "prototypes/diagnostico-operativo/package-lock.json" ]; then
+            echo "path=prototypes/diagnostico-operativo" >> "$GITHUB_OUTPUT"
+          elif [ -f "package-lock.json" ]; then
+            echo "path=." >> "$GITHUB_OUTPUT"
+          else
+            echo "No se encontró package-lock.json" >&2
+            exit 1
+          fi
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ steps.app-directory.outputs.path }}/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+        working-directory: ${{ steps.app-directory.outputs.path }}
+
+      - name: Ejecutar pruebas
+        run: npm test
+        working-directory: ${{ steps.app-directory.outputs.path }}
+
+      - name: Compilar para GitHub Pages
+        run: npm run build
+        working-directory: ${{ steps.app-directory.outputs.path }}
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir artifact de Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ steps.app-directory.outputs.path }}/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Desplegar GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

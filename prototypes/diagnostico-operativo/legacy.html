@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prototipo comercial anterior del Diagnóstico Operativo IA de Proyecto B.">
+    <title>Diagnóstico Operativo IA · Prototipo anterior</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-app-mode="client">
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Proyecto B, inicio">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span><strong>Proyecto B</strong><small>Diagnóstico Operativo IA · versión anterior</small></span>
+      </a>
+      <div class="header-tools">
+        <div class="mode-switch" role="group" aria-label="Seleccionar modo de presentación">
+          <span class="mode-switch-label">Vista</span>
+          <button class="mode-button" type="button" data-app-mode-button="internal" aria-pressed="false">Modo interno</button>
+          <button class="mode-button" type="button" data-app-mode-button="client" aria-pressed="true">Modo cliente/demo</button>
+        </div>
+        <span class="local-badge">Legado · datos ficticios</span>
+      </div>
+    </header>
+    <main id="inicio">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Prototipo anterior conservado</p>
+          <h1 id="hero-title">Diagnóstico operativo completo de seis áreas.</h1>
+          <p class="hero-description">Esta vista conserva las 15 preguntas, resultados, pruebas y exportación básica anteriores.</p>
+          <div class="hero-meta"><span>15 preguntas</span><span>6 áreas operativas</span><span>Sin guardar datos</span></div>
+        </div>
+        <aside class="notice-card"><strong>Versión de referencia</strong><p>Usa únicamente información ficticia. Para la prueba de campo offline vuelve a <a href="./" style="color:#cbe86b">la aplicación nueva</a>.</p></aside>
+      </section>
+      <section class="workspace" aria-label="Cuestionario operativo">
+        <div class="progress-panel">
+          <div><p class="eyebrow">Tu avance</p><p class="progress-copy"><strong id="answered-count">0</strong> de 15 preguntas contestadas</p></div>
+          <div class="progress-track" role="progressbar" aria-label="Progreso del cuestionario" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0"><span id="progress-bar"></span></div>
+        </div>
+        <form id="diagnostic-form" novalidate>
+          <div class="business-name-panel">
+            <div><p class="eyebrow">Identificación ficticia</p><label for="business-name">Nombre del negocio</label><p id="business-name-help">Usa un nombre ficticio.</p></div>
+            <div><input id="business-name" name="businessName" type="text" maxlength="80" autocomplete="off" aria-describedby="business-name-help business-name-error" placeholder="Ejemplo: Taller Horizonte"><p id="business-name-error" class="question-error" hidden>Escribe un nombre ficticio para el negocio.</p></div>
+          </div>
+          <div id="questionnaire"></div>
+          <div id="form-error" class="form-error" role="alert" tabindex="-1" hidden></div>
+          <div class="form-actions"><button class="button button-secondary" id="reset-button" type="button">Reiniciar</button><button class="button button-primary" type="submit">Generar diagnóstico <span aria-hidden="true">→</span></button></div>
+        </form>
+      </section>
+      <section class="test-lab internal-only" aria-labelledby="test-title">
+        <div><p class="eyebrow">Laboratorio de demostración</p><h2 id="test-title">Casos ficticios de prueba</h2><p>Carga un caso o ejecuta los tres resultados esperados.</p></div>
+        <div class="test-actions">
+          <button class="test-case-button" type="button" data-test-case="inventario">Caso A · Inventario</button>
+          <button class="test-case-button" type="button" data-test-case="costos">Caso B · Costos</button>
+          <button class="test-case-button" type="button" data-test-case="clientes">Caso C · Clientes</button>
+          <button class="button button-dark" id="run-tests-button" type="button">Ejecutar 3 pruebas</button>
+        </div>
+        <div id="test-results" class="test-results" aria-live="polite" hidden></div>
+      </section>
+      <section id="report" class="report" aria-labelledby="report-title" hidden>
+        <header class="report-header">
+          <div class="report-heading"><p class="eyebrow">Resultado preliminar</p><h2 id="report-title">Reporte de diagnóstico operativo</h2><div class="report-meta"><div><span>Negocio ficticio</span><strong id="report-business-name">—</strong></div><div><span>Fecha del diagnóstico</span><strong id="report-date">—</strong></div></div></div>
+          <div class="report-actions"><button class="button button-download" id="download-json-button" type="button" disabled>Descargar diagnóstico JSON</button><button class="button button-secondary print-button" type="button" onclick="window.print()">Imprimir vista</button></div>
+        </header>
+        <div id="report-content"></div>
+      </section>
+    </main>
+    <footer><p>Proyecto B · prototipo anterior conservado</p><p>No sustituye una evaluación operativa profesional.</p></footer>
+    <script src="questions.js"></script>
+    <script src="diagnostic.js"></script>
+  </body>
+</html>
