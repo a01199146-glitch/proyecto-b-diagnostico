@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Proyecto B">
+  <rect width="512" height="512" fill="#123b2d"/>
+  <circle cx="256" cy="256" r="188" fill="#1e684c"/>
+  <path d="M151 119h120c73 0 114 30 114 85 0 32-17 56-48 69 40 12 61 41 61 80 0 65-47 99-134 99H151V119Zm73 63v66h48c29 0 44-11 44-34 0-21-15-32-44-32h-48Zm0 125v82h54c34 0 51-14 51-41 0-28-17-41-53-41h-52Z" fill="#d8ee73"/>
+</svg>
