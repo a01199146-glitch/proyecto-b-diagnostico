@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
   return {
   base,
   define: {
-    __APP_VERSION__: JSON.stringify("1.0.0")
+    __APP_VERSION__: JSON.stringify("2.0.0")
   },
   plugins: [
     react(),

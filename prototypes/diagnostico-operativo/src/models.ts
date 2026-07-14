@@ -1,7 +1,17 @@
+export const areaIds = ["ventas", "inventario", "procesos", "costos", "tiempos", "clientes"] as const;
+
+export type AreaId = (typeof areaIds)[number];
 export type DiagnosticStatus = "draft" | "in_progress" | "completed";
+export type AreaStatus =
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "completed_with_pending_information"
+  | "not_applicable";
 export type ResponseMode = "normal" | "not_applicable" | "unknown";
 export type ConfidenceLevel = "low" | "medium" | "high";
 export type PriorityLevel = "low" | "medium" | "high";
+export type SessionScreen = "profile" | "areas" | "area" | "results";
 
 export interface BusinessProfile {
   sessionId: string;
@@ -11,26 +21,38 @@ export interface BusinessProfile {
   intervieweeRole: string;
   employees: number | null;
   branches: number | null;
-  mainConcernCategory: "" | "ventas" | "inventario" | "procesos" | "costos" | "tiempos" | "clientes";
+  mainConcernCategory: "" | AreaId;
   currentTools: string;
   diagnosticDate: string;
 }
 
 export interface DiagnosticSession {
   id: string;
-  schemaVersion: 1;
-  areaId: "inventario";
+  schemaVersion: 1 | 2;
+  areaId?: "inventario";
   status: DiagnosticStatus;
   consultant: string;
   createdAt: string;
   updatedAt: string;
   completedAt: string | null;
+  lastScreen?: SessionScreen;
+  lastAreaId?: AreaId | null;
+}
+
+export interface AreaProgress {
+  id: string;
+  sessionId: string;
+  areaId: AreaId;
+  status: AreaStatus;
+  answeredCount: number;
+  unknownCount: number;
+  updatedAt: string;
 }
 
 export interface AreaResponse {
   id: string;
   sessionId: string;
-  areaId: "inventario";
+  areaId: AreaId;
   questionId: string;
   mode: ResponseMode;
   value: string | null;
@@ -57,18 +79,21 @@ export interface Finding {
 }
 
 export interface PriorityScore {
-  areaId: "inventario";
-  score: number;
+  areaId: AreaId;
+  score: number | null;
   maxScore: 7;
-  priority: PriorityLevel;
+  priority: PriorityLevel | null;
+  status: AreaStatus;
+  answeredCount: number;
   unknownCount: number;
   notApplicableCount: number;
+  severeCount: number;
   explanation: string[];
 }
 
 export interface Recommendation {
   id: string;
-  areaId: "inventario";
+  areaId: AreaId;
   priority: PriorityLevel;
   title: string;
   description: string;
@@ -82,6 +107,7 @@ export interface InternalObservation {
   consultantNote: string;
   evidenceDescription: string;
   possibleCause: string;
+  contradiction?: string;
   isHypothesis: boolean;
   confidence: ConfidenceLevel;
   updatedAt: string;
@@ -92,4 +118,5 @@ export interface DiagnosticBundle {
   profile: BusinessProfile;
   responses: AreaResponse[];
   observations: InternalObservation[];
+  areaProgress: AreaProgress[];
 }
